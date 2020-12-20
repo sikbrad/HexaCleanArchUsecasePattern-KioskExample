@@ -7,14 +7,9 @@
 		<artifactId>gqshop-hex-example</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>adapters-gqshopkiosk</artifactId>
-	<name>adapters-gqshopkiosk</name>
+	<artifactId>integrationtests-gqshopkiosk</artifactId>
+	<name>integrationtests-gqshopkiosk</name>
 
-
-	<properties>
-		<maven.compiler.target>14</maven.compiler.target>
-		<maven.compiler.source>14</maven.compiler.source>
-	</properties>
 
 	<dependencies>
 		<dependency>
@@ -22,6 +17,10 @@
 			<artifactId>application-gqshopkiosk</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.gqshop</groupId>
+			<artifactId>adapters-gqshopkiosk</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
-
 </project>

@@ -19,7 +19,6 @@ public class CustomerOrderingEntrypointWeb implements CommandLineRunner{
 
 	@RequestMapping("/")
 	public String homePage(Model model){
-		System.out.println("main");
 		String currProfiles = String.join(",", env.getActiveProfiles());
 		if(currProfiles.length() == 0) {
 			currProfiles = "(profile undecided - it is set as default)";
