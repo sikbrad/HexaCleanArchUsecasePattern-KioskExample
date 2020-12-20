@@ -1,4 +1,4 @@
-package com.gqshop.kiosk.entrypoints.web;
+package com.gqshop.kiosk.entrypoints.web.customer_ordering;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
