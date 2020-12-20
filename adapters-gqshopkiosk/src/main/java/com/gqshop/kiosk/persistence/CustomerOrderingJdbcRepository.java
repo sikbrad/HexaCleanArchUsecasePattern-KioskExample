@@ -2,7 +2,6 @@ package com.gqshop.kiosk.persistence;
 
 import java.sql.ResultSet;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -26,21 +25,24 @@ public class CustomerOrderingJdbcRepository implements GetAllFoodMenuPort, GetFo
 	}
 	
 	@Override
-	public Optional<FoodMenu> getWithName(String name) {
+	public FoodMenu getWithName(String name) {
 		FoodMenu foodMenu = null;
-		try {
-			foodMenu = jdbcTemplate.queryForObject(String.format("SELECT id,name,description,image_url FROM GQSHOP.FOOD_MENU WHERE name = '%s';",name), rowMapper);
-		}catch(EmptyResultDataAccessException ee) {
-			logger.info("called getWithName with parameter [{}], but could not find in database",name);
-		}
-		return Optional.ofNullable(foodMenu);
+		
+		foodMenu = jdbcTemplate.queryForObject(String.format("SELECT id,name,description,image_url FROM GQSHOP.FOOD_MENU WHERE name = '%s';",name), rowMapper);
+		
+//		try {
+//			foodMenu = jdbcTemplate.queryForObject(String.format("SELECT id,name,description,image_url FROM GQSHOP.FOOD_MENU WHERE name = '%s';",name), rowMapper);
+//		}catch(EmptyResultDataAccessException ee) {
+//			logger.error("called getWithName with parameter [{}], but could not find in database",name);
+//		}
+		return foodMenu;
 	}
 
 	@Override
-	public Optional<FoodMenu> getWithId(String id) {
+	public FoodMenu getWithId(String id) {
 		FoodMenu foodMenu = jdbcTemplate.queryForObject(
 				"SELECT id,name,description,image_url FROM GQSHOP.FOOD_MENU WHERE id = ?;", rowMapper, id.toString());
-		return Optional.ofNullable(foodMenu);
+		return foodMenu;
 	}
 
 	@Override

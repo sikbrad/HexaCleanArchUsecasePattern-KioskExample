@@ -70,14 +70,14 @@ public class CustomerOrderingEntrypointRestIntegrationTest {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.description", CoreMatchers.is(foodMenuDetail)));
 	}
 	
-	@Test
-	public void whenGetFoodMenusWithWrongName_thenReturnsNothing() throws Exception {
-		final String wrongFoodMenuName = "BurgerKingBurger";		
-		
-		mvc.perform(MockMvcRequestBuilders.get(String.format("%s/foodmenu/%s", apiUrl, wrongFoodMenuName))).andDo(print())
-		.andExpect(status().isOk())
-				.andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(wrongFoodMenuName)))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.description", CoreMatchers.is(wrongFoodMenuName)));
-	}
+//	@Test
+//	public void whenGetFoodMenusWithWrongName_thenReturnsNothing() throws Exception {
+//		final String wrongFoodMenuName = "BurgerKingBurger";		
+//		
+//		mvc.perform(MockMvcRequestBuilders.get(String.format("%s/foodmenu/%s", apiUrl, wrongFoodMenuName))).andDo(print())
+//		.andExpect(status().isOk())
+//				.andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//				.andExpect(MockMvcResultMatchers.jsonPath("$.name", CoreMatchers.is(wrongFoodMenuName)))
+//				.andExpect(MockMvcResultMatchers.jsonPath("$.description", CoreMatchers.is(wrongFoodMenuName)));
+//	}
 }

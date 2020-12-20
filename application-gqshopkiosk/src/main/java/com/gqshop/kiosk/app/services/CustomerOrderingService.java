@@ -29,12 +29,12 @@ public class CustomerOrderingService
 	}
 
 	@Override
-	public Optional<FoodMenu> getWithName(String name) {
+	public FoodMenu getWithName(String name) {
 		return getFoodMenuWithNamePort.getWithName(name);
 	}
 
 	@Override
-	public Optional<FoodMenu> getWithId(String id) {
+	public FoodMenu getWithId(String id) {
 		return getFoodMenuWithIdPort.getWithId(id);
 	}
 

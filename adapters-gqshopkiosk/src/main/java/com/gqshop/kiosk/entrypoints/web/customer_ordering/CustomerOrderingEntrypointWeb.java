@@ -14,11 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.gqshop.kiosk.app.domain.FoodMenu;
+import com.gqshop.kiosk.app.services.CustomerOrderingService;
+
 @Controller
 public class CustomerOrderingEntrypointWeb implements CommandLineRunner{
 
 	@Autowired
 	Environment env;
+	
+	@Autowired
+    CustomerOrderingService customerOrderingService;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -51,11 +57,17 @@ public class CustomerOrderingEntrypointWeb implements CommandLineRunner{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} //decode to utf8(space and etc)
-		System.out.println(String.format("foodname : [%s]", foodname));
-		model.addAttribute("foodname", foodname);
-		System.out.println(String.format("foodname1 : [%s]", foodname));
-		model.addAttribute("foodMenuUuid", customerOrderingGetFoodMenuUsecase.getFoodMenuWithName(foodname).getId().toString());
-		System.out.println(String.format("foodname2 : [%s]", foodname));
+		
+		FoodMenu foodMenu = customerOrderingService.getWithName(foodname);
+		if(foodMenu != null) {
+			System.out.println(String.format("foodname : [%s]", foodname));
+			model.addAttribute("foodname", foodname);
+			System.out.println(String.format("foodname1 : [%s]", foodname));
+			
+			model.addAttribute("foodMenuUuid", foodMenu.getId().toString());
+			System.out.println(String.format("foodname2 : [%s]", foodname));	
+		}
+		
 		return "food_menu_detail";
 	}
 	

@@ -42,26 +42,24 @@ public class CustomerOrderingEntrypointRest implements CommandLineRunner {
 	@GetMapping(value = "/foodmenu/{foodname}")
 	public FoodMenuDto getFoodMenuWithName(@PathVariable(value = "foodname") String foodname) {
 		logger.info("getFoodMenuWithName called with param [{}]", foodname);
-		var dto = toFoodMenuDto(customerOrderingService.getWithName(foodname)).orElse(null);	
+		var dto = toFoodMenuDto(customerOrderingService.getWithName(foodname));	
 		return dto;
 	}
 
-	private Collection<FoodMenuDto> toFoodMenuCollectionDto(Collection<FoodMenu> allFoodMenu) {
-		//optional stream to concrete list
-		//@ref https://www.baeldung.com/java-filter-stream-of-optional
-		List<FoodMenuDto> filteredList = 
-				allFoodMenu.stream().map(x -> toFoodMenuDto(Optional.of(x)))
-				  .filter(Optional::isPresent)
-				  .map(Optional::get)
-				  .collect(Collectors.toList());
-		return filteredList;
+	@GetMapping(value = "/foodmenu/uuid/{id}")
+	public FoodMenuDto getFoodMenu(@PathVariable(value = "id") String id) {
+		return toFoodMenuDto(customerOrderingService.getWithId(id));
 	}
 
-	private Optional<FoodMenuDto> toFoodMenuDto(Optional<FoodMenu> optional) {
-		if(optional.isEmpty()) {
-			return Optional.empty();
+	private Collection<FoodMenuDto> toFoodMenuCollectionDto(Collection<FoodMenu> allFoodMenu) {
+		return allFoodMenu.stream().map(x -> toFoodMenuDto(x)).collect(Collectors.toList());
+	}
+
+	private FoodMenuDto toFoodMenuDto(FoodMenu foodMenu) {
+		if(foodMenu == null) {
+			return null;
 		}
-		return Optional.ofNullable(new FoodMenuDto(optional.get().getId(), optional.get().getName(), optional.get().getDescription(), optional.get().getImageUrl()));
+		return new FoodMenuDto(foodMenu.getId(), foodMenu.getName(), foodMenu.getDescription(), foodMenu.getImageUrl());
 	}
 	
 }
