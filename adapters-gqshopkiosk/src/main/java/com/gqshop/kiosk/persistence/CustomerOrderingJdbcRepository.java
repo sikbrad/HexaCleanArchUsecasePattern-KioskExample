@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -14,6 +17,8 @@ import com.gqshop.kiosk.app.port.outgoing.customer_ordering.GetFoodMenuWithIdPor
 import com.gqshop.kiosk.app.port.outgoing.customer_ordering.GetFoodMenuWithNamePort;
 
 public class CustomerOrderingJdbcRepository implements GetAllFoodMenuPort, GetFoodMenuWithIdPort, GetFoodMenuWithNamePort{
+	Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	private JdbcTemplate jdbcTemplate;
 
 	public CustomerOrderingJdbcRepository(JdbcTemplate jdbcTemplate) {
@@ -22,7 +27,12 @@ public class CustomerOrderingJdbcRepository implements GetAllFoodMenuPort, GetFo
 	
 	@Override
 	public Optional<FoodMenu> getWithName(String name) {
-		FoodMenu foodMenu = jdbcTemplate.queryForObject(String.format("SELECT id,name,description,image_url FROM GQSHOP.FOOD_MENU WHERE name = '%s';",name), rowMapper);
+		FoodMenu foodMenu = null;
+		try {
+			foodMenu = jdbcTemplate.queryForObject(String.format("SELECT id,name,description,image_url FROM GQSHOP.FOOD_MENU WHERE name = '%s';",name), rowMapper);
+		}catch(EmptyResultDataAccessException ee) {
+			logger.info("called getWithName with parameter [{}], but could not find in database",name);
+		}
 		return Optional.ofNullable(foodMenu);
 	}
 
