@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<style>
+		img#foodMenuImage {
+			width: 300px;
+		}
+	</style>
+</head>
+
+<body>
+	<h5>Welcome to GqShop</h5>
+	<h2 id="foodMenuName">FOOD NAME</h2>
+	<image id="foodMenuImage"></image>
+	<h5 id="foodMenuDescription">description</h5>
+
+
+	<label for="quantity">Quantity</label>
+	<input type="number" id="orderQuantity" name="quantity" min="1" value="1">
+	<button type="button" class="button" id="btnOrder">ORDER</button>
+
+	<!-- <h5>dbg info</h5>
+	<p>Profile : <span th:text="${foodMenuUuid}">-POPULATE-</span></p> -->
+	<p>EOF</p>
+</body>
+
+<script>
+	var foodName = "[[${foodname}]]";
+	var foodMenuUuid = "[[${foodMenuUuid}]]";
+	var apiFoodMenu = `/api/foodmenu`;
+	var apiFoodOrder = `/api/order`;
+
+	window.onload = function () {
+		console.log("loading foodmenu..");
+
+		$.ajax({
+			url: `${apiFoodMenu}/uuid/${foodMenuUuid}`,
+			success: function (data) {
+
+				console.log(data)
+
+				$("#foodMenuName").text(data.name)
+				$("#foodMenuDescription").text(data.description)
+				$("#foodMenuImage").attr("src", data.imageUrl)
+				$("#btnOrder").click(function () {
+					if (confirm('Order will be placed. Are you sure?')) {
+						var strDo = 'Order is being placed';
+						var orderQty = $('#orderQuantity')[0].value;
+						// OrderFood(orderQty, function () {
+						// 	console.log(strDo);
+						// 	alert(strDo);
+						// });
+						OrderFood(orderQty);
+
+
+					} else {
+						var strDontdo = 'Order is canceled';
+						console.log(strDontdo);
+						alert(strDontdo);
+					}
+				});
+
+
+			}
+		});
+	}
+
+	// function OrderFood(orderQty, succFunc){
+	// 	console.log(`orderQty: ${orderQty}`);
+	// 	succFunc();
+	// }
+	function OrderFood(orderQty) {
+		console.log(`orderQty: ${orderQty}`);
+
+		$.ajax({
+			type: "POST",
+			url: `${apiFoodOrder}?foodid=${foodMenuUuid}&qty=${orderQty}`,
+			success: function (data) {
+
+				console.log(data)
+
+				alert(`Your order number is ${data.orderNumber}`);
+				console.log(`${JSON.stringify(data)}`);
+
+			}
+		})
+
+	}
+</script>
+
+</html>

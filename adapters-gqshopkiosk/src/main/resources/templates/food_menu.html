@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<style>
+
+		table{
+			max-width:400px;
+		}
+		th {
+			font-weight: 900;
+			width:10%;
+			text-align: center;
+		}
+		td {
+			text-align: center;
+			width:10%;
+		}
+	</style>
+</head>
+
+<body>
+	<h5>Welcome to GqShop</h5>
+	<h2>Menu</h2>
+	<div>
+		<table id="foodmenu_table">
+			<thead>
+				<tr>
+					<th>Index</th>
+					<th>Name</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td>idx</td>
+					<td>dummy name</td>
+				</tr>
+			</tbody>
+
+		</table>
+	</div>
+
+</body>
+
+<script>
+	window.onload = function () {
+		console.log("loading foodmenu..");
+		var apiFoodMenu ='/api/foodmenu'; 
+		$.ajax({
+			url: apiFoodMenu,
+			success: function (data) {
+
+				//rem all rows except for th
+				$("#foodmenu_table tbody tr").remove();
+
+				//populate the data
+				var foodMenuTbody = $("#foodmenu_table tbody")[0];
+				var foodMenuList = data;
+				var tbText = ``;
+				for (var idx = 0; idx < foodMenuList.length; idx++) {
+					var foodMenu = foodMenuList[idx];
+					console.log(foodMenu);
+
+					tbText += `
+						<tr>
+							<td>${idx + 1}</td>		
+							<td><a href='food_menu/${foodMenu.name}'>${foodMenu.name}</a></td>
+						</tr>
+						`;
+				}
+				foodMenuTbody.innerHTML = tbText;
+
+				console.log(data);
+			}
+		})
+	}
+</script>
+
+</html>

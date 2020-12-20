@@ -1,4 +1,4 @@
-package com.gqshop.kiosk.configuration.main;
+package com.gqshop.kiosk;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
