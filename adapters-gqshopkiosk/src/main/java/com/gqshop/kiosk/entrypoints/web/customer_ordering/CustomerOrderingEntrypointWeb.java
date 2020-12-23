@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gqshop.kiosk.app.domain.FoodMenu;
-import com.gqshop.kiosk.app.services.CustomerOrderingService;
+import com.gqshop.kiosk.app.port.incoming.customer_ordering.CustomerOrderingUsecase;
 
 @Controller
 public class CustomerOrderingEntrypointWeb implements CommandLineRunner{
@@ -23,8 +23,10 @@ public class CustomerOrderingEntrypointWeb implements CommandLineRunner{
 	@Autowired
 	Environment env;
 	
+//    CustomerOrderingService customerOrderingService;
+
 	@Autowired
-    CustomerOrderingService customerOrderingService;
+	CustomerOrderingUsecase customerOrderingUsecase;
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -58,7 +60,7 @@ public class CustomerOrderingEntrypointWeb implements CommandLineRunner{
 			e.printStackTrace();
 		} //decode to utf8(space and etc)
 		
-		FoodMenu foodMenu = customerOrderingService.getWithName(foodname);
+		FoodMenu foodMenu = customerOrderingUsecase.getWithName(foodname);
 		if(foodMenu != null) {
 			System.out.println(String.format("foodname : [%s]", foodname));
 			model.addAttribute("foodname", foodname);

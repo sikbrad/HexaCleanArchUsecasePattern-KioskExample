@@ -1,8 +1,6 @@
 package com.gqshop.kiosk.entrypoints.rest.customer_ordering;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gqshop.kiosk.app.domain.FoodMenu;
-import com.gqshop.kiosk.app.services.CustomerOrderingService;
+import com.gqshop.kiosk.app.port.incoming.customer_ordering.CustomerOrderingUsecase;
 
 @RestController
 @RequestMapping("/api")
@@ -23,8 +21,12 @@ public class CustomerOrderingEntrypointRest implements CommandLineRunner {
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 
+//	@Autowired
+//    CustomerOrderingService customerOrderingService;
+	
+
 	@Autowired
-    CustomerOrderingService customerOrderingService;
+	CustomerOrderingUsecase customerOrderingUsecase;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -35,20 +37,20 @@ public class CustomerOrderingEntrypointRest implements CommandLineRunner {
 	@GetMapping(value = "/foodmenu")
 	public Collection<FoodMenuDto> getFoodMenuList() {
 		logger.info("getFoodMenuList called");
-		Collection<FoodMenu> allFoodMenu = customerOrderingService.getAll();
+		Collection<FoodMenu> allFoodMenu = customerOrderingUsecase.getAll();
 		return toFoodMenuCollectionDto(allFoodMenu);
 	}
 
 	@GetMapping(value = "/foodmenu/{foodname}")
 	public FoodMenuDto getFoodMenuWithName(@PathVariable(value = "foodname") String foodname) {
 		logger.info("getFoodMenuWithName called with param [{}]", foodname);
-		var dto = toFoodMenuDto(customerOrderingService.getWithName(foodname));	
+		var dto = toFoodMenuDto(customerOrderingUsecase.getWithName(foodname));	
 		return dto;
 	}
 
 	@GetMapping(value = "/foodmenu/uuid/{id}")
 	public FoodMenuDto getFoodMenu(@PathVariable(value = "id") String id) {
-		return toFoodMenuDto(customerOrderingService.getWithId(id));
+		return toFoodMenuDto(customerOrderingUsecase.getWithId(id));
 	}
 
 	private Collection<FoodMenuDto> toFoodMenuCollectionDto(Collection<FoodMenu> allFoodMenu) {

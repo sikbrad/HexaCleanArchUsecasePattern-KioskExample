@@ -6,16 +6,15 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gqshop.kiosk.app.domain.FoodMenu;
-import com.gqshop.kiosk.app.port.outgoing.customer_ordering.GetAllFoodMenuPort;
-import com.gqshop.kiosk.app.port.outgoing.customer_ordering.GetFoodMenuWithIdPort;
-import com.gqshop.kiosk.app.port.outgoing.customer_ordering.GetFoodMenuWithNamePort;
+import com.gqshop.kiosk.app.port.incoming.customer_ordering.GetAllFoodMenuUseCase;
+import com.gqshop.kiosk.app.port.incoming.customer_ordering.GetFoodMenuWithIdUseCase;
+import com.gqshop.kiosk.app.port.incoming.customer_ordering.GetFoodMenuWithNameUseCase;
 
-public class CustomerOrderingJdbcRepository implements GetAllFoodMenuPort, GetFoodMenuWithIdPort, GetFoodMenuWithNamePort{
+public class CustomerOrderingJdbcRepository implements GetAllFoodMenuUseCase, GetFoodMenuWithIdUseCase, GetFoodMenuWithNameUseCase{
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private JdbcTemplate jdbcTemplate;
@@ -26,15 +25,8 @@ public class CustomerOrderingJdbcRepository implements GetAllFoodMenuPort, GetFo
 	
 	@Override
 	public FoodMenu getWithName(String name) {
-		FoodMenu foodMenu = null;
-		
+		FoodMenu foodMenu = null;		
 		foodMenu = jdbcTemplate.queryForObject(String.format("SELECT id,name,description,image_url FROM GQSHOP.FOOD_MENU WHERE name = '%s';",name), rowMapper);
-		
-//		try {
-//			foodMenu = jdbcTemplate.queryForObject(String.format("SELECT id,name,description,image_url FROM GQSHOP.FOOD_MENU WHERE name = '%s';",name), rowMapper);
-//		}catch(EmptyResultDataAccessException ee) {
-//			logger.error("called getWithName with parameter [{}], but could not find in database",name);
-//		}
 		return foodMenu;
 	}
 
