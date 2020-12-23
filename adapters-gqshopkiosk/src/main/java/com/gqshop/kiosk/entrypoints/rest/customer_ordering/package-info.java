@@ -1,1 +1,0 @@
-package com.gqshop.kiosk.entrypoints.rest.customer_ordering;

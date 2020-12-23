@@ -7,15 +7,21 @@
 		<artifactId>gqshop-hex-example</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>integrationtests-gqshopkiosk</artifactId>
-	<name>integrationtests-gqshopkiosk</name>
+	<artifactId>infra-gqshopkiosk</artifactId>
+	<name>infra-gqshopkiosk</name>
 
+
+	<properties>
+		<maven.compiler.target>14</maven.compiler.target>
+		<maven.compiler.source>14</maven.compiler.source>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.gqshop</groupId>
-			<artifactId>infra-gqshopkiosk</artifactId>
+			<artifactId>core-gqshopkiosk</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
+
 </project>

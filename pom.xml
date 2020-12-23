@@ -16,8 +16,8 @@
 
 
 	<modules>
-		<module>application-gqshopkiosk</module>
-		<module>adapters-gqshopkiosk</module>
+		<module>core-gqshopkiosk</module>
+		<module>infra-gqshopkiosk</module>
 		<module>integrationtests-gqshopkiosk</module>
 	</modules>
 
