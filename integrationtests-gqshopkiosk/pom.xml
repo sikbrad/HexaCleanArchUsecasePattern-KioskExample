@@ -14,11 +14,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.gqshop</groupId>
-			<artifactId>core-gqshopkiosk</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.gqshop</groupId>
 			<artifactId>infra-gqshopkiosk</artifactId>
 			<version>1.0.0</version>
 		</dependency>
