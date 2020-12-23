@@ -6,28 +6,19 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.gqshop.kiosk.app.port.incoming.customer_ordering.CustomerOrderingUsecase;
-import com.gqshop.kiosk.app.port.incoming.customer_ordering.GetAllFoodMenuUseCase;
-import com.gqshop.kiosk.app.port.incoming.customer_ordering.GetFoodMenuWithIdUseCase;
-import com.gqshop.kiosk.app.port.incoming.customer_ordering.GetFoodMenuWithNameUseCase;
+import com.gqshop.kiosk.app.usecase.customer.ordering.CustomerOrderingUsecase;
+import com.gqshop.kiosk.app.usecase.customer.ordering.GetAllFoodMenuPort;
+import com.gqshop.kiosk.app.usecase.customer.ordering.GetFoodMenuWithIdPort;
+import com.gqshop.kiosk.app.usecase.customer.ordering.GetFoodMenuWithNamePort;
 
 @Configuration
 public class UseCaseConfiguration  implements CommandLineRunner{
 
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 
-//	@Bean
-//	CustomerOrderingService customerOrderingService(CustomerOrderingJdbcRepository customerOrderingJdbcRepository) {
-//		return new CustomerOrderingService(
-//				(GetAllFoodMenuPort) customerOrderingJdbcRepository,
-//				(GetFoodMenuWithIdPort) customerOrderingJdbcRepository,
-//				(GetFoodMenuWithNamePort) customerOrderingJdbcRepository);
-//	}
-	
-
     @Bean
-    public CustomerOrderingUsecase customerOrderingGetFoodMenuUsecase(GetAllFoodMenuUseCase getAllFoodMenuUseCase, GetFoodMenuWithIdUseCase getFoodMenuWithIdUseCase, GetFoodMenuWithNameUseCase getFoodMenuWithNameUseCase) {
-        return new CustomerOrderingUsecase(getAllFoodMenuUseCase,getFoodMenuWithIdUseCase,getFoodMenuWithNameUseCase);
+    public CustomerOrderingUsecase customerOrderingGetFoodMenuUsecase(GetAllFoodMenuPort getAllFoodMenuPort, GetFoodMenuWithIdPort getFoodMenuWithIdPort, GetFoodMenuWithNamePort getFoodMenuWithNamePort) {
+        return new CustomerOrderingUsecase(getAllFoodMenuPort,getFoodMenuWithIdPort,getFoodMenuWithNamePort);
     }
 
 	@Override

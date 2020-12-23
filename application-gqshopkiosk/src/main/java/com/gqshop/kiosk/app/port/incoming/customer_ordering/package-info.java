@@ -1,1 +1,0 @@
-package com.gqshop.kiosk.app.port.incoming.customer_ordering;

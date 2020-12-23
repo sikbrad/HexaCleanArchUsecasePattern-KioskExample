@@ -5,6 +5,6 @@
     <artifactId>gqshop-hex-example</artifactId>
     <version>1.0.0</version>
   </parent>
-  <artifactId>application-gqshopkiosk</artifactId>
-  <name>application-gqshopkiosk</name>
+  <artifactId>core-gqshopkiosk</artifactId>
+  <name>core-gqshopkiosk</name>
 </project>

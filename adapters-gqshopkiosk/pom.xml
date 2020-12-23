@@ -7,8 +7,8 @@
 		<artifactId>gqshop-hex-example</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>adapters-gqshopkiosk</artifactId>
-	<name>adapters-gqshopkiosk</name>
+	<artifactId>infra-gqshopkiosk</artifactId>
+	<name>infra-gqshopkiosk</name>
 
 
 	<properties>
@@ -19,7 +19,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.gqshop</groupId>
-			<artifactId>application-gqshopkiosk</artifactId>
+			<artifactId>core-gqshopkiosk</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
