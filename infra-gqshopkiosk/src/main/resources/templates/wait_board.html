@@ -97,7 +97,7 @@
 		WebSocket.init();
 		
 		console.log("loading orders..");
-		const apiFoodMenu ='/api/order/all'; 
+		/* const apiFoodMenu ='/api/order/all'; 
 		$.ajax({
 			url: apiFoodMenu,
 			success: function (data) {
@@ -124,7 +124,67 @@
 
 				console.log(data);
 			}
-		})
+		}) */
+		
+		const apiGetOrdersWhereStatusDoing ='/api/order/one/status/doing'; 
+		$.ajax({
+			url: apiGetOrdersWhereStatusDoing,
+			success: function (data) {
+
+                let inProgress = $("#in_progress")[0],
+                    done = $("#done")[0],
+                    orderList = data;
+
+                for (let i = 0; i < orderList.length; i++) {
+                    let target = orderList[i],
+                        id = target.id,
+                        status = target.status,
+                        inner = `
+                        <div class="order">
+                            <label>${id}</label>
+                        </div>
+                        `;
+
+                    if (status === "doing")
+                        inProgress.innerHTML += inner;
+                    else if (status === "done")
+                        done.innerHTML += inner;
+                }
+
+                console.log("doing!");
+				console.log(data);
+			}
+		}) 
+		
+		const apiGetOrdersWhereStatusDone ='/api/order/one/status/done'; 
+		$.ajax({
+			url: apiGetOrdersWhereStatusDone,
+			success: function (data) {
+
+                let inProgress = $("#in_progress")[0],
+                    done = $("#done")[0],
+                    orderList = data;
+
+                for (let i = 0; i < orderList.length; i++) {
+                    let target = orderList[i],
+                        id = target.id,
+                        status = target.status,
+                        inner = `
+                        <div class="order">
+                            <label>${id}</label>
+                        </div>
+                        `;
+
+                    if (status === "doing")
+                        inProgress.innerHTML += inner;
+                    else if (status === "done")
+                        done.innerHTML += inner;
+                }
+
+                console.log("doing!");
+				console.log(data);
+			}
+		}) 
 	}
 	
 

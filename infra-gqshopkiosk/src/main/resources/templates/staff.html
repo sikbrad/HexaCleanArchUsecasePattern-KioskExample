@@ -169,19 +169,6 @@
             console.log("update order");
             
             WebSocket.sendMessage(this.data);
-         /*    const apiFoodMenu =`/api/order/status/${this.data.id}/${this.data.status}`; 
-            $.ajax({
-                method: 'PATCH',
-                url: apiFoodMenu,
-                success: function (data) {
-                    console.log(data);
-                    let parent = dom.parentNode;
-                    parent.removeChild(dom);
-
-                    $("#"+updatedStatusIndex)[0].appendChild(dom);
-                }
-		    }) */
-
         }
 
     }
@@ -189,12 +176,7 @@
     update = function (order) {
         order.updateStatus();
     }
-    
-	
 
-	/* document.addEventListener("DOMContentLoaded", function(){
-		
-	}) */
 </script>
 
 </html>
