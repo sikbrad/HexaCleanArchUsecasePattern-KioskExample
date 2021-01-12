@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>My Cart</title>
+	<script src="/images/sockjs.min.js"></script>
+    <script src="/images/stomp.min.js"></script>
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<style>
+
+		table{
+			max-width:400px;
+		}
+		th {
+			font-weight: 900;
+			width:10%;
+			text-align: center;
+		}
+		td {
+			text-align: center;
+			width:10%;
+		}
+	</style>
+</head>
+
+<body>
+	<h5>Welcome to GqShop</h5>
+	<h2>My Cart</h2>
+	<div>
+		<table id="cart_table">
+			<thead>
+				<tr>
+					<th>Index</th>
+					<th>Name</th>
+					<th>Amount</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td>idx</td>
+					<td>dummy name</td>
+					<td>dummy name</td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<button type="button" class="button" id="btnOrder">ORDER</button>
+		
+	</div>
+</body>
+
+<script>
+
+	let WebSocket=(function(){
+		
+		const SERVER_SOCKET_API="/ws-endpoint";
+		let stompClient;
+	
+		function connect(){
+			let socket = new SockJS(SERVER_SOCKET_API);
+			stompClient = Stomp.over(socket);
+			
+			stompClient.connect({}, function(){
+				stompClient.subscribe('/topic/reflection', function(msg){
+					let body = JSON.parse(msg.body)
+					if(body.sendMessage === "success"){
+						alert(`Your order number is ${body.id}`);
+						window.location.href= "/customer/wait_board";
+					}
+				});
+			});
+		}
+	
+		function sendMessage(data){
+			stompClient.send("/app/order", {}, JSON.stringify({'order': data}));
+		}
+		
+		function init(){
+			connect();
+		}
+		
+		return{
+			init : init,
+			sendMessage : sendMessage
+		}
+		
+	})();
+
+	var apiFoodOrder = `/api/order`;
+
+	window.onload = function () {
+
+		WebSocket.init();
+		
+		var cartSession = sessionStorage.getItem("cart");
+		
+		if(cartSession != null){
+			
+			$("#cart_table tbody tr").remove();
+			
+			var body = $("#cart_table tbody")[0];
+			var tbText = ``;
+
+			savedDataArray = JSON.parse(cartSession)
+			
+			for (var idx = 0; idx < savedDataArray.length; idx++) {
+				
+				var savedData = savedDataArray[idx];
+				
+				tbText += `
+					<tr>
+						<td>${idx + 1}</td>		
+						<td>${savedData.name}</td>
+						<td>${savedData.amount}</td>
+					</tr>
+					`;	
+			}
+			body.innerHTML = tbText;
+			console.log(savedDataArray)
+		}
+		
+		$("#btnOrder").click(function () {
+			
+			var cartSession = sessionStorage.getItem("cart");
+			if(cartSession==null){
+				alert("cart id null, so you should order food first!")
+			}else{
+		    	if (confirm('Order will be placed. Are you sure?')) {
+
+					savedDataArray = JSON.parse(cartSession)
+
+					WebSocket.sendMessage(savedDataArray);
+
+					sessionStorage.clear();
+					
+				}
+		    }
+
+		});
+	}
+
+</script>
+
+</html>

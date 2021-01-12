@@ -12,18 +12,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gqshop.kiosk.core.entity.FoodMenu;
 import com.gqshop.kiosk.core.usecase.customer.ordering.CustomerOrderingUsecase;
 
 @RestController
 @RequestMapping("/api")
 public class CustomerOrderingEntrypointRest implements CommandLineRunner {
+	
+	ObjectMapper mapper = new ObjectMapper(); 
+	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-
-//	@Autowired
-//    CustomerOrderingService customerOrderingService;
-	
 
 	@Autowired
 	CustomerOrderingUsecase customerOrderingUsecase;
@@ -44,7 +43,7 @@ public class CustomerOrderingEntrypointRest implements CommandLineRunner {
 	@GetMapping(value = "/foodmenu/{foodname}")
 	public FoodMenuDto getFoodMenuWithName(@PathVariable(value = "foodname") String foodname) {
 		logger.info("getFoodMenuWithName called with param [{}]", foodname);
-		var dto = toFoodMenuDto(customerOrderingUsecase.getWithName(foodname));	
+		FoodMenuDto dto = toFoodMenuDto(customerOrderingUsecase.getWithName(foodname));	
 		return dto;
 	}
 

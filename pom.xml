@@ -6,6 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.4.0</version>
+		<relativePath/>
 	</parent>
 	<groupId>com.gqshop</groupId>
 	<artifactId>gqshop-hex-example</artifactId>
@@ -14,6 +15,18 @@
 	<name>gqshop-hex-example</name>
 	<description>gqshop maven example using clean architecture hexagonal usecase pattern </description>
 
+	<properties>
+		<maven.compiler.target>8</maven.compiler.target>
+		<maven.compiler.source>8</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <db.driver></db.driver>
+        <db.url></db.url>
+        <db.user></db.user>
+        <db.password></db.password>
+        <flyway.location></flyway.location>
+	</properties>
 
 	<modules>
 		<module>core-gqshopkiosk</module>
@@ -22,7 +35,6 @@
 	</modules>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -31,6 +43,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		    <exclusions>
+		        <exclusion>
+		            <groupId>com.vaadin.external.google</groupId>
+		            <artifactId>android-json</artifactId>
+		        </exclusion>
+		    </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -70,7 +88,8 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.4.197</version>
-		</dependency>
+		    <scope>runtime</scope>
+		</dependency>		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
@@ -106,6 +125,98 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.10</version>
 		</dependency>
+		<!-- PostgreSQL 9.4 -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.4.1209.jre6</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.googlecode.json-simple</groupId>
+		    <artifactId>json-simple</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+		<dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+		 <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-dbcp</artifactId>
+            <version>9.0.0.M10</version>
+        </dependency>
 	</dependencies>
 
+		
+	<build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>4.0.3</version>
+                <configuration>
+                    <driver>${db.driver}</driver>
+                    <url>${db.url}</url>
+                    <user>${db.user}</user>
+                    <password>${db.password}</password>
+                    <locations>
+                        <location>${flyway.location}</location>
+                    </locations>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+	<profiles>
+        <profile>
+            <id>DEV-environment</id>
+            <properties>
+                <db.driver>org.h2.Driver</db.driver>
+                <db.url>jdbc:h2:mem:gqshop;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;</db.url>
+                <db.user>SA</db.user>
+                <db.password></db.password>
+                <flyway.location>filesystem:../infra-gqshopkiosk/src/main/resources/db/migration/dev</flyway.location>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>TEST-environment</id>
+            <properties>
+               <db.driver>org.h2.Driver</db.driver>
+                <db.url>jdbc:h2:mem:gqshoptest;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;</db.url>
+                <db.user>SA</db.user>
+                <db.password></db.password>
+                <flyway.location>filesystem:../infra-gqshopkiosk/src/main/resources/db/migration/test</flyway.location>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>PREPROD-environment</id>
+            <properties>
+                <db.driver>org.h2.Driver</db.driver>
+                 <db.url>jdbc:h2:mem:gqshopprod;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;</db.url>
+                <db.user>SA</db.user>
+                <db.password></db.password>
+                <flyway.location>filesystem:../infra-gqshopkiosk/src/main/resources/db/migration/preprod</flyway.location>
+            </properties>
+        </profile>
+    </profiles>
 </project>

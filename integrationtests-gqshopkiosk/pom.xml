@@ -10,7 +10,6 @@
 	<artifactId>integrationtests-gqshopkiosk</artifactId>
 	<name>integrationtests-gqshopkiosk</name>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>com.gqshop</groupId>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="/images/sockjs.min.js"></script>
+    <script src="/images/stomp.min.js"></script>
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<style>
+        body{
+            background-color: black;
+            color:white;
+        }
+		table{
+			max-width:400px;
+		}
+		th {
+			font-weight: 900;
+			width:10%;
+			text-align: center;
+		}
+		td {
+			text-align: center;
+			width:10%;
+		}
+        .order_head {
+            text-align: center;
+            float:left;
+            width: 49%;
+            border: 1px solid white;
+        }
+        .order_board {
+            text-align: center;
+            position: relative;
+            width: 49%;
+            color: white;
+        }
+        .order {
+            float:left;
+            position: relative;
+            width:100%;
+            border:1px solid black;
+        }
+        .order label{
+            width: 100%;
+            font-size: 35px;
+            text-align: center;
+        }
+	</style>
+</head>
+
+<body>
+	<div class="order_head" style="color: yellow;">
+        <h2>DONE</h2>
+    </div>
+    <div class="order_head">
+        <h2>IN PROGRESS</h2>
+    </div>
+    <div id="done" class="order_board" style="color: yellow;"></div>
+    <div id="in_progress" class="order_board" style="left:49%;"></div>
+</body>
+
+<script>
+
+	let WebSocket=(function(){
+		
+		const SERVER_SOCKET_API="/ws-endpoint";
+		let stompClient;
+	
+		function connect(){
+			let socket = new SockJS(SERVER_SOCKET_API);
+			stompClient = Stomp.over(socket);
+			
+			stompClient.connect({}, function(){
+				stompClient.subscribe('/topic/reflection', function(msg){
+					let body = JSON.parse(msg.body)
+					if(body.sendMessage === "success"){
+						window.location.reload(true);
+					}
+				});
+			});
+		}
+
+		function init(){
+			connect();
+		}
+		
+		return{
+			init : init
+		}
+		
+	})();
+
+	window.onload = function () {
+		
+		WebSocket.init();
+		
+		console.log("loading orders..");
+		const apiFoodMenu ='/api/order/all'; 
+		$.ajax({
+			url: apiFoodMenu,
+			success: function (data) {
+
+                let inProgress = $("#in_progress")[0],
+                    done = $("#done")[0],
+                    orderList = data;
+
+                for (let i = 0; i < orderList.length; i++) {
+                    let target = orderList[i],
+                        id = target.id,
+                        status = target.status,
+                        inner = `
+                        <div class="order">
+                            <label>${id}</label>
+                        </div>
+                        `;
+
+                    if (status === "doing")
+                        inProgress.innerHTML += inner;
+                    else if (status === "done")
+                        done.innerHTML += inner;
+                }
+
+				console.log(data);
+			}
+		})
+	}
+	
+
+</script>
+
+</html>

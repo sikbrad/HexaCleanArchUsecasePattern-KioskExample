@@ -22,8 +22,6 @@ public class CustomerOrderingEntrypointWeb implements CommandLineRunner{
 
 	@Autowired
 	Environment env;
-	
-//    CustomerOrderingService customerOrderingService;
 
 	@Autowired
 	CustomerOrderingUsecase customerOrderingUsecase;
@@ -73,7 +71,16 @@ public class CustomerOrderingEntrypointWeb implements CommandLineRunner{
 		return "food_menu_detail";
 	}
 	
+	@GetMapping("/customer/wait_board")
+	public String wait_board() {
+		return "wait_board";
+	}
 
+	@GetMapping("/customer/cart")
+	public String mycart() {		
+		return "cart";
+	}
+	
 	@Override
 	public void run(String... args) throws Exception {
 		logger.info("CustomerOrderingEntrypointWeb bean created");

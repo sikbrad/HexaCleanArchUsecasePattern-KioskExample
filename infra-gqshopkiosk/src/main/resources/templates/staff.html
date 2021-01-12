@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="/images/sockjs.min.js"></script>
+    <script src="/images/stomp.min.js"></script>
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<style>
+        body{
+            background-color: black;
+            color:white;
+        }
+		table{
+			max-width:400px;
+		}
+		th {
+			font-weight: 900;
+			width:10%;
+			text-align: center;
+		}
+		td {
+			text-align: center;
+			width:10%;
+		}
+        .order_head {
+            text-align: center;
+            float:left;
+            width: 24%;
+            border: 1px solid white;
+        }
+        .order_board {
+            text-align: center;
+            position: relative;
+            width: 24%;
+            color: white;
+        }
+        .order {
+            float:left;
+            position: relative;
+            width:100%;
+            border:1px solid black;
+        }
+        .order:hover{
+            color:#eeff00;
+            cursor: pointer;
+        }
+        .order label{
+            width: 100%;
+            font-size: 35px;
+            text-align: center;
+        }
+	</style>
+</head>
+
+<body>
+	<div class="order_head" >
+        <h2>END</h2>
+    </div>
+    <div class="order_head" style="color: yellow;">
+        <h2>DONE</h2>
+    </div>
+    <div class="order_head" >
+        <h2>IN PROGRESS</h2>
+    </div>
+    <div class="order_head" style="color: yellow;">
+        <h2>TO DO</h2>
+    </div>
+    <div id="end" class="order_board"></div>
+    <div id="done" class="order_board" style="left:24%;"></div>
+    <div id="doing" class="order_board" style="left:48%;"></div>
+    <div id="todo" class="order_board" style="left:72%;"></div>
+</body>
+
+<script>
+
+	let WebSocket=(function(){
+		
+		const SERVER_SOCKET_API="/ws-endpoint";
+		let stompClient;
+	
+		function connect(){
+			let socket = new SockJS(SERVER_SOCKET_API);
+			stompClient = Stomp.over(socket);
+			
+			stompClient.connect({}, function(){
+				stompClient.subscribe('/topic/reflection', function(msg){
+					let body = JSON.parse(msg.body)
+					if(body.sendMessage === "success"){
+						window.location.reload(true);
+					}
+				});
+			});
+		}
+
+		function sendMessage(data){
+			stompClient.send("/app/order/status", {}, JSON.stringify({'id':data.id, 'status':data.status}));
+		}
+		
+		function init(){
+			connect();
+		}
+		
+		return{
+			init : init,
+			sendMessage : sendMessage
+		}
+		
+	})();
+
+	window.onload = function () {
+		
+		WebSocket.init();
+		
+		console.log("loading orders");
+		const apiFoodMenu ='/api/order/all'; 
+		$.ajax({
+			url: apiFoodMenu,
+			success: function (data) {
+
+                let doing = $("#doing")[0],
+                    done = $("#done")[0],
+                    todo = $("#todo")[0],
+                    end = $("#end")[0],
+                    orderList = data;
+                
+                for (let i = 0; i < orderList.length; i++) {
+                    let target = orderList[i];
+                    let order = new Order(target);
+                    order.dom.addEventListener("click",function(){update(order)});
+                }
+				console.log(data);
+			}
+		})
+    }
+
+    class Order{
+        constructor(data) {
+            this.data = data;
+
+            let doc = document,
+            div = doc.createElement('div'),
+            idLabel = doc.createElement('label');
+
+            div.classList.add("order");
+            idLabel.innerText = this.data.id;
+            div.appendChild(idLabel);
+            $("#"+this.data.status)[0].appendChild(div);
+
+            this.dom = div;
+        }
+
+        updateStatus() {
+            let updatedStatusIndex;
+            switch(this.data.status) {
+                case "todo":updatedStatusIndex = "doing";
+                            break;
+                case "doing":updatedStatusIndex = "done";
+                            break;
+                case "done":updatedStatusIndex = "end";
+                            break;
+                case "end":return;
+            }
+            this.data.status = updatedStatusIndex;
+
+            let dom = this.dom;
+
+            console.log("update order");
+            
+            WebSocket.sendMessage(this.data);
+         /*    const apiFoodMenu =`/api/order/status/${this.data.id}/${this.data.status}`; 
+            $.ajax({
+                method: 'PATCH',
+                url: apiFoodMenu,
+                success: function (data) {
+                    console.log(data);
+                    let parent = dom.parentNode;
+                    parent.removeChild(dom);
+
+                    $("#"+updatedStatusIndex)[0].appendChild(dom);
+                }
+		    }) */
+
+        }
+
+    }
+
+    update = function (order) {
+        order.updateStatus();
+    }
+    
+	
+
+	/* document.addEventListener("DOMContentLoaded", function(){
+		
+	}) */
+</script>
+
+</html>

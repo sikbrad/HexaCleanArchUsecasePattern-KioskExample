@@ -21,10 +21,9 @@
 
 	<label for="quantity">Quantity</label>
 	<input type="number" id="orderQuantity" name="quantity" min="1" value="1">
-	<button type="button" class="button" id="btnOrder">ORDER</button>
-
-	<!-- <h5>dbg info</h5>
-	<p>Profile : <span th:text="${foodMenuUuid}">-POPULATE-</span></p> -->
+	
+	<button type="button" class="button" id="btnCart">Cart</button>
+	
 	<p>EOF</p>
 </body>
 
@@ -33,6 +32,7 @@
 	var foodMenuUuid = "[[${foodMenuUuid}]]";
 	var apiFoodMenu = `/api/foodmenu`;
 	var apiFoodOrder = `/api/order`;
+	var foodMenuName = "";
 
 	window.onload = function () {
 		console.log("loading foodmenu..");
@@ -43,53 +43,62 @@
 
 				console.log(data)
 
+				foodMenuName = data.name;
 				$("#foodMenuName").text(data.name)
 				$("#foodMenuDescription").text(data.description)
 				$("#foodMenuImage").attr("src", data.imageUrl)
-				$("#btnOrder").click(function () {
-					if (confirm('Order will be placed. Are you sure?')) {
-						var strDo = 'Order is being placed';
-						var orderQty = $('#orderQuantity')[0].value;
-						// OrderFood(orderQty, function () {
-						// 	console.log(strDo);
-						// 	alert(strDo);
-						// });
-						OrderFood(orderQty);
 
+				$("#btnCart").click(function () {
 
-					} else {
-						var strDontdo = 'Order is canceled';
-						console.log(strDontdo);
-						alert(strDontdo);
+					var savedDataArray = new Array();
+					var savedData = new Object();
+					
+					var cartSession = sessionStorage.getItem("cart");
+					
+					var orderQty = $('#orderQuantity')[0].value;
+
+					savedData.id = foodMenuUuid;
+					savedData.amount = orderQty;
+					savedData.name = foodMenuName;
+
+					if(cartSession == null){
+						savedDataArray.push(savedData);
+						sessionStorage.setItem("cart", JSON.stringify(savedDataArray));
+						
+					}else{
+						savedDataArray = JSON.parse(cartSession)
+						//이미 savedDataArray에 id가 담겨있는지 확인
+						console.log(savedDataArray.length)
+						
+						let bExistInCart = false;
+						for(idx in savedDataArray){
+							if(savedDataArray[idx].id == foodMenuUuid){
+								bExistInCart = true;	
+							}
+						}
+						
+						if(bExistInCart){
+							let numAmount = parseInt(savedDataArray[idx].amount) + parseInt(orderQty);
+							savedDataArray[idx].amount = String(numAmount);
+							sessionStorage.clear();
+							sessionStorage.setItem("cart", JSON.stringify(savedDataArray));
+						}else{
+							savedDataArray.push(savedData);
+							sessionStorage.clear();
+							sessionStorage.setItem("cart", JSON.stringify(savedDataArray));
+						}
 					}
+
+					alert('Complete To Add to My Cart!!');
+					window.location.href= "/customer/food_menu"; 
+					
 				});
-
-
+				
 			}
 		});
 	}
 
-	// function OrderFood(orderQty, succFunc){
-	// 	console.log(`orderQty: ${orderQty}`);
-	// 	succFunc();
-	// }
-	function OrderFood(orderQty) {
-		console.log(`orderQty: ${orderQty}`);
-
-		$.ajax({
-			type: "POST",
-			url: `${apiFoodOrder}?foodid=${foodMenuUuid}&qty=${orderQty}`,
-			success: function (data) {
-
-				console.log(data)
-
-				alert(`Your order number is ${data.orderNumber}`);
-				console.log(`${JSON.stringify(data)}`);
-
-			}
-		})
-
-	}
+	
 </script>
 
 </html>

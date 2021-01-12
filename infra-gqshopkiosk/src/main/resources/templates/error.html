@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+	<style>
+		img#errorImage {
+			width: 300px;
+		}
+        h5 {
+            font-size: 25px;
+        }
+	</style>
+</head>
+
+<body>
+    <h5 id="errorType">ERROR TYPE</h5>
+    <image id="errorImage" src="/images/error/error.jpg"></image>
+    <h5 id="errorMessage">description</h5>
+
+	<p><a href="/">back</a></p>
+</body>
+
+<script>
+	window.onload = function () {
+
+        $("#errorType").text("[[${errorType}]]" + "  ERROR")
+        $("#errorMessage").text("[[${errorMessage}]]")
+	}
+
+	// function OrderFood(orderQty, succFunc){
+	// 	console.log(`orderQty: ${orderQty}`);
+	// 	succFunc();
+	// }
+</script>
+
+</html>
