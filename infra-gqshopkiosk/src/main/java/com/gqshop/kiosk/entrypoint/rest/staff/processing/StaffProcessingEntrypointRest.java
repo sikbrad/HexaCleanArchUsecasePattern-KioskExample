@@ -1,4 +1,4 @@
-package com.gqshop.kiosk.entrypoint.rest.customer.ordering;
+package com.gqshop.kiosk.entrypoint.rest.staff.processing;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gqshop.kiosk.core.entity.Orders;
 import com.gqshop.kiosk.core.usecase.customer.ordering.CustomerOrderingUsecase;
 import com.gqshop.kiosk.core.usecase.staff.processing.StaffProcessingUsecase;
+import com.gqshop.kiosk.entrypoint.model.OrdersDto;
 
 @RestController
 @RequestMapping("/api")

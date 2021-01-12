@@ -1,4 +1,4 @@
-package com.gqshop.kiosk.entrypoint.rest.customer.ordering;
+package com.gqshop.kiosk.entrypoint.model;
 
 public class MessageVO {
 

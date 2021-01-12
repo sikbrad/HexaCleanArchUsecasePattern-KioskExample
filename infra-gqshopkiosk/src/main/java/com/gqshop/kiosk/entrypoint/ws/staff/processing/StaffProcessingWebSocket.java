@@ -1,4 +1,4 @@
-package com.gqshop.kiosk.entrypoint.rest.customer.ordering;
+package com.gqshop.kiosk.entrypoint.ws.staff.processing;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gqshop.kiosk.core.usecase.staff.processing.StaffProcessingUsecase;
+import com.gqshop.kiosk.entrypoint.model.MessageVO;
 
 @RestController
 @RequestMapping("/app")

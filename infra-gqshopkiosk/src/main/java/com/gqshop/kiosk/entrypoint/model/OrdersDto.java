@@ -1,4 +1,4 @@
-package com.gqshop.kiosk.entrypoint.rest.customer.ordering;
+package com.gqshop.kiosk.entrypoint.model;
 
 import java.util.List;
 import com.gqshop.kiosk.core.entity.OrdersHasMenu;

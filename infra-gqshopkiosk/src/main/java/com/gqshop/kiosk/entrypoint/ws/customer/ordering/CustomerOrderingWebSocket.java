@@ -1,4 +1,4 @@
-package com.gqshop.kiosk.entrypoint.rest.customer.ordering;
+package com.gqshop.kiosk.entrypoint.ws.customer.ordering;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +17,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gqshop.kiosk.core.entity.Orders;
 import com.gqshop.kiosk.core.usecase.customer.ordering.CustomerOrderingUsecase;
+import com.gqshop.kiosk.entrypoint.model.MessageVO;
+import com.gqshop.kiosk.entrypoint.model.OrdersDto;
 
 @RestController
 @RequestMapping("/app")

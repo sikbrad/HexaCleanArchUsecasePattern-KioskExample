@@ -40,7 +40,7 @@ import  org.springframework.web.socket.sockjs.client.WebSocketTransport ;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.gqshop.kiosk.entrypoint.rest.customer.ordering.MessageVO;
+import com.gqshop.kiosk.entrypoint.model.MessageVO;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
 @AutoConfigureMockMvc

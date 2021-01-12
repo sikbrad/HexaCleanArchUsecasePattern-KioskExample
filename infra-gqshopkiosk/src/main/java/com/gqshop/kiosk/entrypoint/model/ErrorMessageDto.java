@@ -1,4 +1,4 @@
-package com.gqshop.kiosk.entrypoint.rest;
+package com.gqshop.kiosk.entrypoint.model;
 
 public class ErrorMessageDto {
 	private final String errorType;

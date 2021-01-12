@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gqshop.kiosk.core.entity.FoodMenu;
 import com.gqshop.kiosk.core.usecase.customer.ordering.CustomerOrderingUsecase;
+import com.gqshop.kiosk.entrypoint.model.FoodMenuDto;
 
 @RestController
 @RequestMapping("/api")
