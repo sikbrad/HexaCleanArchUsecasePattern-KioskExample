@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -43,15 +44,11 @@ public class StaffCheckingJdbcDataProvider implements GetReceivedOrdersPort,
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	@Override
-	public Collection<Order> getAll(){
-		String sql = "SELECT id as orderId, status as status, created_at as createdAt FROM gqshop.orders;";
-		
-		Collection<Order> orderList = new ArrayList<Order>();
-		
-		List<Map<String, Object>> orders = jdbcTemplate.queryForList(sql);
+	public Collection<Order> createOrderMapToList(List<Map<String, Object>> receivedMapList) {
 
-		for(Map<String, Object> orderMap : orders) {
+		Collection<Order> orderList = new ArrayList<Order>();
+
+		for(Map<String, Object> orderMap : receivedMapList) {
 			
 			Order order = new Order((int)orderMap.get("orderId"), (String)orderMap.get("status"), (Timestamp)orderMap.get("createdAt"));
 			int orderId = order.getId();
@@ -74,8 +71,46 @@ public class StaffCheckingJdbcDataProvider implements GetReceivedOrdersPort,
 			order.setMenus(foodMenus);
 			
 			orderList.add(order);
-		}
+		}	
 		return orderList;
+	}
+	
+	@Override
+	public Collection<Order> getAll(){
+		
+		String sql = "SELECT id as orderId, status as status, created_at as createdAt FROM gqshop.orders;";
+		
+		//Collection<Order> orderList = new ArrayList<Order>();
+		
+		List<Map<String, Object>> orders = jdbcTemplate.queryForList(sql);
+		
+		return createOrderMapToList(orders);
+
+//		for(Map<String, Object> orderMap : orders) {
+//			
+//			Order order = new Order((int)orderMap.get("orderId"), (String)orderMap.get("status"), (Timestamp)orderMap.get("createdAt"));
+//			int orderId = order.getId();
+//			String sql2 =  "select m.orders_id as orderId, m.amount as amount, f.id as menuId, f.name as menuName from gqshop.orders_has_food_menu as m\r\n" + 
+//					  "join gqshop.food_menu as f on f.id=m.food_menu_id\r\n" + 
+//					  "where m.orders_id=?;";
+//
+//			List<Map<String, Object>> orderHasMenus = jdbcTemplate.queryForList(sql2,  new Object[] {orderId});
+//
+//			List<FoodMenu> foodMenus = new ArrayList<FoodMenu>();
+//			for(Map<String, Object> row : orderHasMenus) {
+//				String menuId = (String)row.get("menuId");
+//				System.out.println("menuId : " + menuId);
+//				FoodMenu foodMenu = jdbcTemplate.queryForObject(
+//						"SELECT id,name,description,image_url FROM gqshop.food_menu WHERE id = ?;", rowFoodMenuMapper, menuId);
+//				
+//				foodMenus.add(foodMenu);
+//			}
+//			
+//			order.setMenus(foodMenus);
+//			
+//			orderList.add(order);
+//		}
+//		return orderList;
 	}
 	
 	@Override
@@ -93,31 +128,41 @@ public class StaffCheckingJdbcDataProvider implements GetReceivedOrdersPort,
 
 	@Override
 	public Order getWithId(int id) {
-
+		Order order = null;
 		String sql = "select id as orderId, status as status, created_at as createdAt from gqshop.orders where id=?";
-		
+
 		List<Map<String, Object>> orders = jdbcTemplate.queryForList(sql, new Object[] {id});
-		Map<String, Object> orderMap = orders.get(0);
 
-		Order order = new Order((int)orderMap.get("orderId"), (String)orderMap.get("status"), (Timestamp)orderMap.get("createdAt"));
-		
-		String sql2 =  "select m.orders_id as orderId, m.amount as amount, f.id as menuId, f.name as menuName from gqshop.orders_has_food_menu as m\r\n" + 
-				  "join gqshop.food_menu as f on f.id=m.food_menu_id\r\n" + 
-				  "where m.orders_id=?;";
+		Collection<Order> orderList = createOrderMapToList(orders);
 
-		List<Map<String, Object>> orderHasMenus = jdbcTemplate.queryForList(sql2,  new Object[] {id});
-
-		List<FoodMenu> foodMenus = new ArrayList<FoodMenu>();
-		for(Map<String, Object> row : orderHasMenus) {
-			String menuId = (String)row.get("menuId");
-			System.out.println("menuId : " + menuId);
-			FoodMenu foodMenu = jdbcTemplate.queryForObject(
-					"SELECT id,name,description,image_url FROM gqshop.food_menu WHERE id = ?;", rowFoodMenuMapper, menuId);
-			
-			foodMenus.add(foodMenu);
-		}
-		
-		order.setMenus(foodMenus);
+		 Iterator iter = orderList.iterator();
+	     while (iter.hasNext()) {      // any more element
+	         // Retrieve the next element, explicitly downcast from Object back to String
+	    	 order = (Order)iter.next();
+	      }
+	
+//		
+//		Map<String, Object> orderMap = orders.get(0);
+//
+//		Order order = new Order((int)orderMap.get("orderId"), (String)orderMap.get("status"), (Timestamp)orderMap.get("createdAt"));
+//		
+//		String sql2 =  "select m.orders_id as orderId, m.amount as amount, f.id as menuId, f.name as menuName from gqshop.orders_has_food_menu as m\r\n" + 
+//				  "join gqshop.food_menu as f on f.id=m.food_menu_id\r\n" + 
+//				  "where m.orders_id=?;";
+//
+//		List<Map<String, Object>> orderHasMenus = jdbcTemplate.queryForList(sql2,  new Object[] {id});
+//
+//		List<FoodMenu> foodMenus = new ArrayList<FoodMenu>();
+//		for(Map<String, Object> row : orderHasMenus) {
+//			String menuId = (String)row.get("menuId");
+//			System.out.println("menuId : " + menuId);
+//			FoodMenu foodMenu = jdbcTemplate.queryForObject(
+//					"SELECT id,name,description,image_url FROM gqshop.food_menu WHERE id = ?;", rowFoodMenuMapper, menuId);
+//			
+//			foodMenus.add(foodMenu);
+//		}
+//		
+//		order.setMenus(foodMenus);
 		
 		return order;
 
