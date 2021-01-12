@@ -1,5 +1,9 @@
 package com.gqshop.kiosk.core.usecase.customer.waiting;
 
-public interface GetNotCookedOrderPort {
+import java.util.Collection;
 
+import com.gqshop.kiosk.core.entity.Order;
+
+public interface GetNotCookedOrderPort {
+	Collection<Order> getOrderWithStatus(String status);
 }

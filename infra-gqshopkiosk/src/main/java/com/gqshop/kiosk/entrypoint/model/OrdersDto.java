@@ -1,16 +1,15 @@
 package com.gqshop.kiosk.entrypoint.model;
 
 import java.util.List;
-import com.gqshop.kiosk.core.entity.OrdersHasMenu;
 
 public class OrdersDto {
 
 	private final String status;
 	private final int id;
-	private final List<OrdersHasMenu> menus;
+	private final List<OrderHasMenu> menus;
 	private final String createdAt;
 	
-	public OrdersDto(int id, String status, String createdAt, List<OrdersHasMenu> menus) {
+	public OrdersDto(int id, String status, String createdAt, List<OrderHasMenu> menus) {
 		super();
 		this.id=id;
 		this.status=status;
@@ -24,7 +23,7 @@ public class OrdersDto {
 	public String getStatus() {
 		return status;
 	}
-	public List<OrdersHasMenu> getMenus(){
+	public List<OrderHasMenu> getMenus(){
 		return menus;
 	}
 	public String getCreatedAt() {

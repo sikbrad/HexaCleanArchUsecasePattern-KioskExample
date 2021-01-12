@@ -33,7 +33,6 @@ public class CustomerOrderingEntrypointRest implements CommandLineRunner {
 		logger.info("CustomerOrderingEntrypointRest bean created");
 	}
 	
-
 	@GetMapping(value = "/foodmenu")
 	public Collection<FoodMenuDto> getFoodMenuList() {
 		logger.info("getFoodMenuList called");

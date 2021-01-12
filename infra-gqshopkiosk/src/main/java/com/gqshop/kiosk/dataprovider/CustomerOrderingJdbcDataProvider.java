@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -21,17 +19,16 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import com.gqshop.kiosk.core.entity.FoodMenu;
-import com.gqshop.kiosk.core.entity.Orders;
-import com.gqshop.kiosk.core.entity.OrdersHasMenu;
+import com.gqshop.kiosk.core.usecase.customer.ordering.CreateOrderPort;
 import com.gqshop.kiosk.core.usecase.customer.ordering.GetAllFoodMenuPort;
 import com.gqshop.kiosk.core.usecase.customer.ordering.GetFoodMenuWithIdPort;
 import com.gqshop.kiosk.core.usecase.customer.ordering.GetFoodMenuWithNamePort;
-import com.gqshop.kiosk.core.usecase.customer.ordering.GetOrderWithIdPort;
-import com.gqshop.kiosk.core.usecase.customer.ordering.CreateOrderPort;
 
 @Component
-public class CustomerOrderingJdbcDataProvider implements GetAllFoodMenuPort, GetFoodMenuWithIdPort, GetFoodMenuWithNamePort,
-														CreateOrderPort, GetOrderWithIdPort{
+public class CustomerOrderingJdbcDataProvider implements GetAllFoodMenuPort, 
+														GetFoodMenuWithIdPort, 
+														GetFoodMenuWithNamePort,
+														CreateOrderPort{
 	
 	Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -112,53 +109,6 @@ public class CustomerOrderingJdbcDataProvider implements GetAllFoodMenuPort, Get
         return orderId;
 	}
 
-	@Override
-	public Orders getWithId(int id) {
-
-		String sql = "select * from gqshop.orders where id=?";
-		
-		Orders order = jdbcTemplate.queryForObject(sql, rowOrdersMapper, id);
-
-		String sql2 =  "select m.orders_id, m.amount, f.id, f.name from gqshop.orders_has_food_menu as m\r\n" + 
-				  "join gqshop.food_menu as f on f.id=m.food_menu_id\r\n" + 
-				  "where m.orders_id=?";
-
-		List<OrdersHasMenu> test2 = jdbcTemplate.queryForObject(sql2, new OrderHasFoodMenuRowMapper(), id);
-
-		order.setMenus(test2);
-		
-		return order;
-	}
-	
-	private class OrderHasFoodMenuRowMapper implements RowMapper<List<OrdersHasMenu>> {
-
-		public List<OrdersHasMenu> mapRow(ResultSet rs, int rowCnt) throws SQLException{
-			 
-			List<OrdersHasMenu> orderHasMenus = new ArrayList<OrdersHasMenu>();
-			 
-			while(rs.next()) {
-				OrdersHasMenu orderHasMenu = new OrdersHasMenu(
-						rs.getInt(1), 
-						rs.getString(3), 
-						rs.getInt(2), 
-						rs.getString(4));
-		    	orderHasMenus.add(orderHasMenu);
-			}
-
-	        return orderHasMenus;
-	   }
-	}
-
-	private RowMapper<Orders> rowOrdersMapper = (ResultSet rs, int rowNum) -> {
-
-		int orderId = rs.getInt(1);
-		String status = rs.getString(2);
-		String createdAt = rs.getString(3);
-		
-		Orders order = new Orders(orderId, status, createdAt);
-		
-		return order;
-	};
 	
 	// @ref rowmapper tutorial https://www.youtube.com/watch?v=XL8lp0cCVks
 	private RowMapper<FoodMenu> rowMapper = (ResultSet rs, int rowNum) -> {

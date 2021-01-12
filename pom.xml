@@ -200,11 +200,11 @@
         <profile>
             <id>TEST-environment</id>
             <properties>
-               <db.driver>org.h2.Driver</db.driver>
-                <db.url>jdbc:h2:mem:gqshoptest;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;</db.url>
+                <db.driver>org.h2.Driver</db.driver>
+                <db.url>jdbc:h2:mem:gqshop;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;</db.url>
                 <db.user>SA</db.user>
                 <db.password></db.password>
-                <flyway.location>filesystem:../infra-gqshopkiosk/src/main/resources/db/migration/test</flyway.location>
+                <flyway.location>filesystem:../infra-gqshopkiosk/src/main/resources/db/migration/dev</flyway.location>
             </properties>
         </profile>
 
@@ -212,10 +212,10 @@
             <id>PREPROD-environment</id>
             <properties>
                 <db.driver>org.h2.Driver</db.driver>
-                 <db.url>jdbc:h2:mem:gqshopprod;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;</db.url>
+                <db.url>jdbc:h2:mem:gqshop;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1;</db.url>
                 <db.user>SA</db.user>
                 <db.password></db.password>
-                <flyway.location>filesystem:../infra-gqshopkiosk/src/main/resources/db/migration/preprod</flyway.location>
+                <flyway.location>filesystem:../infra-gqshopkiosk/src/main/resources/db/migration/dev</flyway.location>
             </properties>
         </profile>
     </profiles>
